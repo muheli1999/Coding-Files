@@ -1,0 +1,21 @@
+In this folder, all coding files using the LSTM and ARMA models are uploaded and constantly modified. In addition, we have 
+recently added Support Vector Regression (SVR) and Autoregressive Integrated Moving Average (ARIMA) methods. 
+*******************************************************************************************************************************
+Python libraries required for SVR:  
+future, time,pandas, numpy, sklearn, matplotlib
+
+Python libraries required for ARIMA:
+pandas, numpy, scipy,tushare, datetime, statsmodels, matplotlib, sklearn, math, pmdarima
+*******************************************************************************************************************************
+Running results:  
+LSTM model can function on all available data files. ARMA works on all but one, in which case the data stability did not statisfy
+ minimum requirements using the order determined by the ARMA funciton. SVR functions on all files. ARIMA is not yet ready for 
+testing and will likely be abandonned in the future. Please note that the main objective is the LSTM model. 
+
+LSTM has the least error after 100 epoches of iteration, however maximum accuracy is usually achieved at around 40 epoches. ARMA
+error is greater than LSTM but smaller than SVR. 
+
+In terms of the types of data that are accurately predicted, it can be concluded that stable and close-to-linear data sets yield 
+the most satisfactory results, regardless of method.
+
+Please refer to "figures" folder for graphic results.

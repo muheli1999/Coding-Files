@@ -1,0 +1,51 @@
+Note:
+This log is the property of Yijie Chen (GitHub ID: COEN24) who has recorded the progress of our joint work. I started working
+on the project on July 1, 2019 and he joined our team on July 15, 2019. Below is his update log from his own GitHub repository,
+which I translated from Chinese to English.
+
+I was responsible for the 7.19 and 7.30 updates. 
+===============================================================================================================================
+
+2019.7.17
+Current objective:
+1. We currently have the accuracy, error analysis, and plotting of LSTM and ARMA. 
+2. Finish the coding of the other 2-3 models.
+3. Study the correlation between sites.
+4. Set different time lags (delays) and number of neurons for the LSTM model and compare errors.
+5. Choose the best time lag and number of neurons and analyze the types of data that yield the best results. 
+6. Compare results and compose paper.
+===============================================================================================================================
+
+2019.7.19
+Improved ARMA, although the code does not run on "accumulation of dirt" data file. All other data files have been run and 
+graphed. Still requires further work.
+
+Finished ARMA in the afternoon.
+
+To summarize the results: "illegal littering" is the most accurately predicted one, "accumulation of dirt" does not run, no 
+further information on the correlation between data types and accuracies. Hoping that stablizing data will shed light on the
+issue. Will attempt ARIMA to improve data stability.
+
+===============================================================================================================================
+
+2019.7.22
+Finished SVR, but the results are unsatisfactory. Differentiation and stablization of data succeded. As of ARMA and ARIMA, we can
+exculde data stability as the reason for the failure. Possibly caused by the inaccurate ordering of (p,q). Will further investigate.
+
+Auto-Arima can automatically change p and q, but only produces a trend. 
+
+Sample data does not have particular trend or seasonality, therefore we conclude that LSTM is the best model in our case.
+
+Will attemp different ordering methods, then work on LSTM.
+
+===============================================================================================================================
+
+2019.7.30
+Modified LSTM, which is now compatible with all data files. Currently studying algorithm and Keras. Will discuss prediction by
+site with senior researchers. Will also conduct tests on LSTM changing variables such as rate of study and number of layers. 
+Will try to draw conclusions on their correlation with accuracy. 
+
+
+
+
+

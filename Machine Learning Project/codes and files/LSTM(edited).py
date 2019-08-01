@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+#以下模块在本代码中并未使用到，在此留下以防万一
 #from __future__ import print_function
 #from keras.models import Sequential
 from keras.layers.core import Dense, Activation, Dropout
@@ -25,28 +25,27 @@ from sklearn.preprocessing import MinMaxScaler
 _rebuild()
 mpl.rcParams['font.sans-serif']=[u'SimHei']
 mpl.rcParams['axes.unicode_minus']=False
-file_name = u"暴露垃圾-所有街道数据.csv"
+#读取文件
+file_name = u"非法小广告-所有街道数据.csv"
 df=pd.read_csv(file_name,encoding='gbk')
 
-
-#获得表格第4列前289行的所有数据，也就是立按量 因为数据太大，目前这里只取前289行的立案量
+#获得表格第4列的所有数据，也就是立按量
 hourlyData=df.values[:,3]
-#取所有时用这个
-#hourlyData=df.values[:,3]
+#定义数据长度datalen用于计算站点数量
 datalen = df.shape[0]
-#获得表格所有月份Mon
+#获得表格第3列第所有数据，也就是月份Mon
 Mon=df.values[:,2]
 
 #写成科学计数法（float32）
 #hourlyData=hourlyData.astype('float32')
+
 #输出一下得到的案件量个数
 print('aqi data length:', len(hourlyData))
-
-
 
 #读取数据
 delay=10
 num_Data=48
+#站点数量=数据长度/48（其中48为4年的总月份数）
 num_sites=int(datalen/num_Data)
 X=[]
 y=[]
@@ -57,8 +56,6 @@ hourlyData = hourlyData.reshape(num_sites,num_Data)
 
 #转置 现在每一列代表不同的街道了
 hourlyData = hourlyData.T
-
-
 
 #====================================以下为对训练样本的处理 标准化、打乱等================================
 #在进行运算之前可以对数据进行归一化，进而降低loss
@@ -129,66 +126,17 @@ def cal_acc(pre,real):
     acc[2]=(abs(pre-real)/real).mean()
     acc[3]=1-sum((pre-real)**2)/sum((abs(pre-real.mean())+abs(real-real.mean()))**2)
     return acc.transpose()
-
+#生成.json和.hdf5文件用于预测
 model_json = model.to_json()
 model_path = '$8.json'
 model_weight_path = '$8_weights.hdf5'
 with open(model_path, "w") as json_file:
     json_file.write(model_json)
+#定义总迭代次数epoches和初始精度数组acc_tr和acc_t
 epoches = 100
 acc_tr=np.zeros((epoches,4))
 acc_t=np.zeros((epoches,4))
 history = []
-#msemae_tr = np.zeros((epoches,2))
-#msemae_t = np.zeros((epoches,2))
-
-'''#定义MSE/MAE误差计算方式
-def cal_msemae_tr():
-    # train set
-    trainPredict = model.predict([train_set_x])
-    # 数据反归一化
-    trainPredict = scaler.inverse_transform(trainPredict)
-    train_set_y = y[:trLen]
-    train_set_y = scaler.inverse_transform(train_set_y)
-    train_error = []
-    trainY = train_set_y.reshape(1, len(train_set_y) * num_sites)
-    trainP = trainPredict.reshape(1, len(trainPredict) * num_sites)
-    for i in range(len(trainY)):
-        train_error.append(trainP[i] - trainY[i])
-    train_sqError = []
-    train_absError = []
-    for val in train_error:
-        train_sqError.append(val * val)
-        train_absError.append(abs(val))
-    train_MSE = sum(train_sqError) / len(train_sqError)
-    train_MAE = sum(train_absError) / len(train_absError)
-    msemae = np.zeros((2,1))
-    msemae[0] = sum(train_MSE) / len(train_MSE)
-    msemae[1] = sum(train_MAE) / len(train_MAE)
-    return  msemae.T
-def cal_msemae_t():
-    testPredict = model.predict([test_set_x])
-    testPredict = scaler.inverse_transform(testPredict)
-    test_set_y = y[trLen:]
-    # 数据反归一化
-    test_set_y = scaler.inverse_transform(test_set_y)
-    test_error = []
-    testY = test_set_y.reshape(1, len(test_set_y) * num_sites)
-    testP = testPredict.reshape(1, len(testPredict) * num_sites)
-    for i in range(len(testY)):
-        test_error.append(testP[i] - testY[i])
-    test_sqError = []
-    test_absError = []
-    for val in test_error:
-        test_sqError.append(val * val)
-        test_absError.append(abs(val))
-    test_MSE = sum(test_sqError) / len(test_sqError)
-    test_MAE = sum(test_absError) / len(test_absError)
-    msemae = np.zeros((2,1))
-    msemae[0] = sum(test_MSE) / len(test_MSE)
-    msemae[1] = sum(test_MAE) / len(test_MAE)
-    return  msemae.T
-'''
 #================================================================训练LSTM=====================================
 #开始迭代
 for epoch in range(epoches):
@@ -251,7 +199,6 @@ for i in range(0,num_sites):
         plt.suptitle(u'各地点按月立案数量')
     subplot = plt.subplot(3, 2, layout_num + 1)
     site = site_names[i]
-    #plt.plot(predict_data)
     plt.plot(site_names[i])
     plt.xlabel(u'时间')
     plt.ylabel(u'立案量')
@@ -259,30 +206,7 @@ for i in range(0,num_sites):
     subplot.set_title(site_cnames[i])
     plt.tight_layout()
     layout_num = layout_num + 1
-'''
-plt.figure(1)
-bzf = plt.subplot(231)
-cw = plt.subplot(232)
-cym = plt.subplot(233)
-rhm = plt.subplot(234)
-ds = plt.subplot(235)
-dhm = plt.subplot(236)
-street_list = [bzf,cw,cym,rhm,ds,dhm]
-x1 = np.linspace(1,48,48)
-street_names = [u'白纸坊',u'朝外',u'朝阳门',u'大红门',u'德胜',u'东华门']
 
-def plot1(i,supt):
-    plt.plot(x1,hourlyData[:,i])
-    plt.xlabel(u'时间（月）')
-    plt.ylabel(u'立案量')
-    street_list[i].set_title(street_names[i])
-    plt.legend(labels = [u'立案量'],loc='upper left')
-
-for i in range(0,6):
-    plt.sca(street_list[i])
-    plot1(i,street_names[i])
-plt.suptitle('各地点按月立案数量')
-'''
 #作图：精度vs迭代次数
 plt.figure(figsize=(16,9))
 #x2 = np.linspace(1,100,len(a[:,0]))
@@ -315,30 +239,7 @@ for i in range(0,num_sites):
     subplot.set_title(site_cnames[i])
     plt.tight_layout()
     layout_num = layout_num + 1
-'''
-plt.figure(3)
-bzf3 = plt.subplot(231)
-cw3 = plt.subplot(232)
-cym3 = plt.subplot(233)
-rhm3 = plt.subplot(234)
-ds3 = plt.subplot(235)
-dhm3 = plt.subplot(236)
-legend_labels = [u'白纸坊预测', u'朝外预测',u'朝阳门预测',u'大红门预测',u'德胜预测',u'东华门预测',
-                 u'白纸坊实际',u'朝外实际',u'朝阳门实际',u'大红门实际',u'德胜实际',u'东华门实际']
-street_list3 = [bzf3,cw3,cym3,rhm3,ds3,dhm3]
-def plot2(i):
-    plt.plot(trainPredict[:,i])
-    plt.plot(train_set_y[:,i])
 
-    plt.xlabel(u'数据编号')
-    plt.ylabel(u'数值')
-for i in range(0,6):
-    plt.sca(street_list3[i])
-    plot2(i)
-    plt.legend(labels=[legend_labels[i], legend_labels[6+i]])
-    street_list3[i].set_title(street_names[i])
-plt.suptitle(u'训练数据预测/实际值')
-'''
 #测试数据组
 
 plt.figure(figsize=(16,9))
@@ -359,29 +260,9 @@ for i in range(0,num_sites):
     subplot.set_title(site_cnames[i])
     plt.tight_layout()
     layout_num=layout_num+1
-'''
-plt.figure(4)
-bzf4 = plt.subplot(231)
-cw4 = plt.subplot(232)
-cym4 = plt.subplot(233)
-rhm4 = plt.subplot(234)
-ds4 = plt.subplot(235)
-dhm4 = plt.subplot(236)
-street_list4 = [bzf4,cw4,cym4,rhm4,ds4,dhm4]
-def plot3(i):
-    plt.plot(testPredict[:,i])
-    plt.plot(test_set_y[:,i])
-    plt.xlabel(u'数据编号')
-    plt.ylabel(u'数值')
-for i in range(0,6):
-    plt.sca(street_list4[i])
-    plot3(i)
-    plt.legend(labels=[legend_labels[i], legend_labels[6+i]])
-    street_list4[i].set_title(street_names[i])
-plt.suptitle(u'测试数据预测/实际值')
-'''
+
 #作图：MSE与MAE
-plt.figure(5)
+plt.figure(figsize=(16,9))
 mseTrain = plt.subplot(221)
 maeTrain = plt.subplot(222)
 mseTest = plt.subplot(223)
@@ -421,24 +302,15 @@ with open(u"输出文件："+file_name, "w", newline="",encoding="utf-8-sig") as
         first_row.append(site_cnames[i]+u'预测')
         first_row.append(site_cnames[i]+u'实际')
     csvwriter.writerow(first_row)
-    #csvwriter.writerow([u'月份/地点', legend_labels[0],legend_labels[6],legend_labels[1],legend_labels[7],
-    #                   legend_labels[2],legend_labels[8],legend_labels[3],legend_labels[9],legend_labels[4],
-    #                   legend_labels[10],legend_labels[5],legend_labels[11]])
     for i in range(0, trLen):
         train_row = [months[i]]
-        for j in range(0, num_sites - 1):
+        for j in range(0, num_sites):
             train_row.append(trainPredict[i, j])
-            train_row.append(trainPredict[i, j])
+            train_row.append(train_set_y[i, j])
         csvwriter.writerow(train_row)
-        #csvwriter.writerow([months[i], trainPredict[i, 0],train_set_y[i,0], trainPredict[i, 1], train_set_y[i,1],
-        #                    trainPredict[i, 2], train_set_y[i,2], trainPredict[i, 3], train_set_y[i,3],
-        #                    trainPredict[i, 4],train_set_y[i,4], trainPredict[i, 5],train_set_y[i,5]])
     for i in range(0, num_Data-trLen-10):
         test_row = [months[i + trLen]]
-        for j in range(0,num_sites-1):
+        for j in range(0,num_sites):
             test_row.append(testPredict[i,j])
-            test_row.append(testPredict[i,j])
+            test_row.append(test_set_y[i,j])
         csvwriter.writerow(test_row)
-        #csvwriter.writerow([months[i + trLen], testPredict[i, 0],test_set_y[i,0], testPredict[i, 1],test_set_y[i,1],
-        #                   testPredict[i, 2],test_set_y[i,2], testPredict[i, 3],test_set_y[i,3],
-        #                  testPredict[i, 4],test_set_y[i,4],testPredict[i, 5],test_set_y[i,5]])

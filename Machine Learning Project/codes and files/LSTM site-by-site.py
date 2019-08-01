@@ -23,7 +23,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 #设置绘图时的中文显示（需安装黑体字体）
 _rebuild()
-mpl.rcParams['font.sans-serif']=[u'SimHei']p
+mpl.rcParams['font.sans-serif']=[u'SimHei']
 mpl.rcParams['axes.unicode_minus']=False
 
 df=pd.read_csv(u"暴露垃圾-六街道数据.csv",encoding='utf')
@@ -105,7 +105,8 @@ x = Dropout(0.5)(x)
 #6、后面添加一个隐层，采用relu作为激活函数，根据relu的特性，可以直接输出实数
 #x = Dense(100, activation='relu')(x)
 #7、继续使用relu输出最终预测值
-loss = Dense(num_sites, activation='relu', name='main_output')(x)
+#loss = Dense(num_sites, activation='relu', name='main_output')(x)
+loss = Dense(1, activation='relu', name='main_output')(x)
 
 #使用刚才创建的图生成模型
 model = Model(input=[main_input], output=[loss])
@@ -143,54 +144,6 @@ msemae_tr = np.zeros((epoches,2))
 msemae_t = np.zeros((epoches,2))
 trainPredict = []
 testPredict = []
-#定义MSE/MAE误差计算方式
-'''
-def cal_msemae_tr():
-    # train set
-    trainPredict = model.predict([train_set_x])
-    # 数据反归一化
-    trainPredict = scaler.inverse_transform(trainPredict)
-    train_set_y = y[:trLen]
-    train_set_y = scaler.inverse_transform(train_set_y)
-    train_error = []
-    trainY = train_set_y.reshape(1, len(train_set_y) * num_sites)
-    trainP = trainPredict.reshape(1, len(trainPredict) * num_sites)
-    for i in range(len(trainY)):
-        train_error.append(trainP[i] - trainY[i])
-    train_sqError = []
-    train_absError = []
-    for val in train_error:
-        train_sqError.append(val * val)
-        train_absError.append(abs(val))
-    train_MSE = sum(train_sqError) / len(train_sqError)
-    train_MAE = sum(train_absError) / len(train_absError)
-    msemae = np.zeros((2,1))
-    msemae[0] = sum(train_MSE) / len(train_MSE)
-    msemae[1] = sum(train_MAE) / len(train_MAE)
-    return  msemae.T
-def cal_msemae_t():
-    testPredict = model.predict([test_set_x])
-    testPredict = scaler.inverse_transform(testPredict)
-    test_set_y = y[trLen:]
-    # 数据反归一化
-    test_set_y = scaler.inverse_transform(test_set_y)
-    test_error = []
-    testY = test_set_y.reshape(1, len(test_set_y) * num_sites)
-    testP = testPredict.reshape(1, len(testPredict) * num_sites)
-    for i in range(len(testY)):
-        test_error.append(testP[i] - testY[i])
-    test_sqError = []
-    test_absError = []
-    for val in test_error:
-        test_sqError.append(val * val)
-        test_absError.append(abs(val))
-    test_MSE = sum(test_sqError) / len(test_sqError)
-    test_MAE = sum(test_absError) / len(test_absError)
-    msemae = np.zeros((2,1))
-    msemae[0] = sum(test_MSE) / len(test_MSE)
-    msemae[1] = sum(test_MAE) / len(test_MAE)
-    return  msemae.T
-'''
 #================================================================训练LSTM=====================================
 #开始迭代
 #mPredict = model.predict(train_set_x[:,:,0].reshape((trLen,delay,1)))
@@ -202,7 +155,7 @@ for epoch in range(epoches):
         solver = Adam(lr=0.0001)
         model.compile(optimizer=solver,
                   loss={'main_output': 'mape'} )
-    for i in range (0,num_sites):
+    for i in range (0,1):
 
         hist = model.fit({'main_input': train_set_x[:,:,i].reshape((trLen,delay,1))},
                   {'main_output': train_set_y[:,i]},validation_data=(

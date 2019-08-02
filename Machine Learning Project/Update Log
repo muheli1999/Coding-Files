@@ -29,8 +29,9 @@ issue. Will attempt ARIMA to improve data stability.
 ===============================================================================================================================
 
 2019.7.22
-Finished SVR, but the results are unsatisfactory. Differentiation and stablization of data succeded. As of ARMA and ARIMA, we can
-exculde data stability as the reason for the failure. Possibly caused by the inaccurate ordering of (p,q). Will further investigate.
+Finished SVR, but the results are unsatisfactory. Differentiation and stablization of data succeded. As of ARMA and ARIMA, we 
+can exculde data stability as the reason for the failure. Possibly caused by the inaccurate ordering of (p,q). Will further 
+investigate.
 
 Auto-Arima can automatically change p and q, but only produces a trend. 
 
@@ -45,7 +46,21 @@ Modified LSTM, which is now compatible with all data files. Currently studying a
 site with senior researchers. Will also conduct tests on LSTM changing variables such as rate of study and number of layers. 
 Will try to draw conclusions on their correlation with accuracy. 
 
+===============================================================================================================================
+(below are my own updates)
 
+2019.8.1
+Deleted irrelevant codes in LSTM(edited). Fixed output file problems. Provided useful comments in Chinese. Will attempt 
+translation to English once project is finished. Also added "references" folder which contains several papers on which this
+project is based. I will write a similar one modeled on the English paper towards the end of the project. 
+
+Note that the output files are unavailable here as it contains government information. However, the code should run on any file
+with the required properties described in the REAMDME file under "Machine Learning Project." A sample data file will be 
+providedfor reference. 
+
+As of right now, the necessity of developing a site-by-site LSTM model is under discussion. Yijie Chen is studying the 
+correlation between sites while I am awaiting further directions from Tong Wu, a graduate student of Chinese Academy of 
+Sciences.
 
 
 

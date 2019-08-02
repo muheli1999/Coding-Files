@@ -1,0 +1,26 @@
+Hello, and welcome to the Dinosaur Game. 
+
+This game is derived from the Google Chrome dinosaur game, which appears on the browser when it fails to connect to the 
+Internet. I have attempted the IOS development of such game using Xcode and Swift language, with help from multiple Youtube
+videos. Although those videos do not demonstrate the coding of the dinosaur game per se, they have introduced me to the Swift
+language while working on their own games. 
+
+The final objectives of the game include:
+1. A start menu containing tabs such as "New Game" and "Scoreboard," as well as request to enter the player's name. 
+2. A game scene that is almost identical to the Google Chrome game, with elements of the dinosaur, several types of cactus, 
+and birds. (Possibly with additional elements). HI score should be recorded as well as current score.
+3. A pause menu that stops the game and enables the player to return to the main menu. 
+4. A "game over" scene that appears when the dinosaur comes into contact with any object. 
+5. A scoreboard that allows users to access scores achieved by all players on their device. 
+
+(Pending supplementation)
+Below is the update log:
+
+==============================================================================================================================
+As of Aug 2, 2019:
+Project now runs on IOS simulator on Mac. Requires IOS 12.0. Background initialized, dinosaur is able to jump upward upon 
+touching anywhere on the screen. Game can generate and delete cacti separated by randomized time intervals. 
+
+Next steps: Improve background. Adjust positions of dinosaur and cacti. Need refined images of these elements. Set up collision
+and "Game Over" sign. Projected finish date Aug 5, 2019. 
+

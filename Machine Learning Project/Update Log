@@ -62,5 +62,12 @@ As of right now, the necessity of developing a site-by-site LSTM model is under 
 correlation between sites while I am awaiting further directions from Tong Wu, a graduate student of Chinese Academy of 
 Sciences.
 
+2019 8.8
+We have decided to use LSTM by site. Yijie came up with the code, but it required that I run it for each site with different 
+parameters, totaling hundreds of times of manual operations. I modified the code so that a loop took care of everything, 
+including saving files to their assigned locations. It took my computer an entire night to run the whole loop. 
+
+With my code, any file can be run using any parameters with a single click. I believe this will facilitate our testing by a
+significant amount of time. 
 
 
